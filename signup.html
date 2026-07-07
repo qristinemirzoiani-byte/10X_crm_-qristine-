@@ -4,8 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+
 </head>
 <body>
+    <h1>Sign Up</h1>
     
+    <form id="signupForm">
+        <!-- name add -->
+        <input type="text" id="regName" placeholder="Full Name">
+        <input type="email" id="regEmail" placeholder="Email">
+        <input type="password" id="regPassword" placeholder="Password">
+        
+        <!-- აქ ვიძახებთ ახალ ფუნქციას -->
+        <button type="button" onclick="registerUser()">Sign Up</button> 
+    </form>
+    
+    <!-- ბმული, თუ უკვე აქვს ექაუნთი, ლოგინზე რომ დაბრუნდეს -->
+    <a href="index.html">Already have an account? Sign in. ✅</a>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
