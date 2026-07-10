@@ -7,6 +7,36 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
+    <nav class="sidebar">
+        <div class="logo">10X CRM</div>
+        <ul class="nav-links">
+            <li><a href="dashboard.html" class="active">Dashboard</a></li>
+            <li><a href="clients.html">Clients</a></li>
+            <li><a href="profile.html">Profile</a></li>
+        </ul>
+        <div class="nav-bottom">
+            <!-- თემის შეცვლა (მოგვიანებით ავამუშავებთ) -->
+            <button id="themeToggle" class="btn-secondary">Light Mode</button>
+            <!-- Logout ღილაკი (უკვე მუშაობს auth.js-დან) -->
+            <button onclick="logout()" class="btn-logout">Logout</button>
+        </div>
+    </nav>
+
+    <!-- მთავარი კონტენტი -->
+    <main class="main-content">
+        <!-- P3.1: მისალმება და ცოცხალი საათი -->
+        <div class="header-section">
+            <h1 id="welcomeText">Welcome back!</h1>
+            <p id="liveClock" class="clock-text">Loading time...</p>
+        </div>
+
+        <!-- აქ მოგვიანებით ჩავსვამთ 4 სტატისტიკის ბარათს -->
+        <div class="stats-grid">
+            <!-- სტატისტიკები დაემატება -->
+        </div>
+    </main>
+
+    <!-- ჯერ Auth Guard იტვირთება, მერე Dashboard-ის ლოგიკა -->
     <script src="auth.js"></script>
     <script src="app.js"></script>
 </body>

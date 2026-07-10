@@ -8,21 +8,45 @@
 
 </head>
 <body>
-    <h1>Sign Up</h1>
-    
-    <form id="signupForm">
-        <!-- name add -->
-        <input type="text" id="regName" placeholder="Full Name">
-        <input type="email" id="regEmail" placeholder="Email">
-        <input type="password" id="regPassword" placeholder="Password">
+     <div id="toast-container"></div>
+
+    <div class="auth-container">
+        <h2>Create your account</h2>
         
-        <!-- აქ ვიძახებთ ახალ ფუნქციას -->
-        <button type="button" onclick="registerUser()">Sign Up</button> 
-    </form>
-    
-    <!-- ბმული, თუ უკვე აქვს ექაუნთი, ლოგინზე რომ დაბრუნდეს -->
-    <a href="index.html">Already have an account? Sign in. ✅</a>
+        <form id="signupForm" novalidate>
+            <div class="form-group">
+                <input type="text" id="regName" placeholder="Full Name">
+                <span class="error-text" id="nameError"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="email" id="regEmail" placeholder="Email">
+                <span class="error-text" id="emailError"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="regCompany" placeholder="Company (optional)">
+                <span class="error-text" id="companyError"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="password" id="regPassword" placeholder="Password">
+                <span class="error-text" id="passwordError"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="password" id="regConfirmPassword" placeholder="Confirm Password">
+                <span class="error-text" id="confirmPasswordError"></span>
+            </div>
+
+            <button type="submit" class="btn">Create Account</button>
+        </form>
+
+        <div class="auth-link">
+            Already have an account? <a href="index.html">Log in</a>
+        </div>
+    </div>
+
     <script src="auth.js"></script>
-    <script src="app.js"></script>
 </body>
 </html>
