@@ -423,3 +423,34 @@ body:has(.sidebar) {
 @keyframes slideDown {
     to { transform: translateY(0); }
 }
+
+/* P0.3 — Light theme */
+body.light-theme {
+    background-color: #f1f5f9;
+    color: #0f172a;
+}
+
+body.light-theme .auth-container,
+body.light-theme .sidebar,
+body.light-theme .client-card,
+body.light-theme .modal-content {
+    background-color: #ffffff;
+    color: #0f172a;
+}
+
+body.light-theme input,
+body.light-theme .search-input,
+body.light-theme .sort-select {
+    background-color: #f8fafc;
+    color: #0f172a;
+    border-color: #cbd5e1;
+}
+
+body.light-theme .nav-links a {
+    color: #475569;
+}
+
+body.light-theme .nav-links a.active,
+body.light-theme .nav-links a:hover {
+    color: #0284c7;
+}
