@@ -76,3 +76,68 @@ querySelector(...)?
 #### 3. მოდალური ფანჯრის დახურვა ფონზე დაჭერით
 * **ლოგიკა:** `if (e.target.id === 'addClientModal') this.closeModal();`
 * **როგორ მუშაობს:** როცა მომხმარებელი აჭერს ეკრანს, `e.target.id` ამოწმებს დაჭერილი ელემენტის ID-ს. თუ ID არის `addClientModal` (ანუ მოდალის უკანა მუქი, გამჭვირვალე ფონი), ფანჯარა იხურება. ხოლო თუ ფორმის შიგნით დააჭირა რამეს, მოდალი ღია რჩება.
+
+--------------
+1. ფილტრაციის ჩიპების ლოგიკა 
+document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        this.filter = chip.dataset.filter;
+        this.render();
+    });
+});
+- ყველა ჩიპის პოვნა: document.querySelectorAll('.chip') პოულობს HTML-ში არსებულ ყველა ფილტრის ღილაკს (ჩიპს).
+ციკლით გავლა (forEach): სათითაოდ ყველა ჩიპს ვამაგრებთ დაწკაპუნების (click) მსმენელს.
+- ვიზუალური გააქტიურება: ჩიპზე დაჭერისას ჯერ ყველა ჩიპს ვაცლით active კლასს, შემდეგ კი მხოლოდ იმას ვუმატებთ, რომელზეც მომხმარებელმა დააწკაპუნა (chip.classList.add('active')).
+- მონაცემის დამახსოვრება: this.filter = chip.dataset.filter კითხულობს HTML-ში data-filter ატრიბუტით გაწერილ მნიშვნელობას (მაგალითად: "Won", "Lead") და ინახავს ჩვენს this.filter ცვლადში.
+- ეკრანის განახლება: this.render() თავიდან ხატავს კლიენტების სიას მხოლოდ არჩეული სტატუსით.
+
+-----------
+### 📌 JavaScript Events & Logic Cheatsheet (10X CRM)
+
+#### 1. Common Browser Events
+* **click** - Fires when an element is clicked (Buttons, Links).
+* **submit** - Fires when a form is submitted. (Used to prevent default page reload via `e.preventDefault()`).
+* **input** - Fires instantly when user types in an input field (Used for real-time search).
+* **change** - Fires when a form element value is changed (Dropdown lists, checkboxes).
+
+#### 2. Sorting Dropdown (`change` event)
+```javascript
+document.getElementById('sortSelect')?.addEventListener('change', (e) => {
+    this.sort = e.target.value; // Gets the selected option text (e.g., 'name')
+    this.render();              // Re-draws the list on the screen
+});
+3. Event Delegation (Deleting Clients)
+Instead of adding event listeners to 30 individual delete buttons, we add a single listener to the parent container (this.container).
+code
+JavaScript
+this.container.addEventListener('click', (e) => {
+    // Check if the clicked element (e.target) is actually the delete button
+    if (e.target.classList.contains('btn-delete')) {
+        // dataset.id reads "data-id" from HTML, Number() converts the string to a number
+        this.delete(Number(e.target.dataset.id));
+    }
+});
+e.target = The exact element that was clicked inside the container.
+dataset.id = Reads the unique ID attached to the button (from data-id).
+---------
+
+### Key JavaScript Concepts Learned
+
+#### 1. Event Delegation (მოვლენის დელეგირება)
+*   **Concept:** Instead of attaching event listeners to multiple child elements (like 30 delete buttons), we attach a single listener to the parent container (`this.container`).
+*   **Why?** It improves performance and works perfectly for dynamically added new elements.
+
+#### 2. Event Target (`e.target`)
+*   **Concept:** A built-in property that references the exact HTML element that triggered the event (the actual element clicked by the user).
+
+#### 3. Class Validation (`classList.contains`)
+*   **Concept:** `classList` returns a list of classes on the element. `.contains('className')` is a built-in method that checks if a specific class exists, returning `true` or `false`.
+
+#### 4. The `change` Event
+*   **Concept:** Triggers when the value of an element (like a dropdown `<select>`, checkbox, or radio button) changes.
+
+#### 5. Custom Methods vs Built-in Methods
+*   **`this.delete(id)`** is a custom function written in our class to handle database and local storage deletion, while **`Number()`** or **`contains()`** are built-in JavaScript helpers.
+
