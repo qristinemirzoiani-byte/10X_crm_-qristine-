@@ -1,10 +1,11 @@
-// P4 — კლიენტების გვერდი (ჩატვირთვა, CRUD, ფილტრი)
+// P4 — clients page (loading, CRUD, filtering, sorting, details modal P4.8)
 class ClientsPage {
     constructor() {
         this.clients = [];
         this.filter = 'All';
         this.search = '';
         this.sort = 'newest';
+        this.activeClient = null;
 
         this.container = document.getElementById('clientsContainer');
         if (!this.container) return;
@@ -14,18 +15,21 @@ class ClientsPage {
     }
 
     bindEvents() {
-        document.getElementById('addClientBtn')?.addEventListener('click', () => this.openModal());
-        document.getElementById('closeModalBtn')?.addEventListener('click', () => this.closeModal());
+        // Add Client Modal events
+        document.getElementById('addClientBtn')?.addEventListener('click', () => this.openAddModal());
+        document.getElementById('closeModalBtn')?.addEventListener('click', () => this.closeAddModal());
         document.getElementById('addClientModal')?.addEventListener('click', (e) => {
-            if (e.target.id === 'addClientModal') this.closeModal();
+            if (e.target.id === 'addClientModal') this.closeAddModal();
         });
         document.getElementById('addClientForm')?.addEventListener('submit', (e) => this.handleAdd(e));
 
+        // Search event
         document.getElementById('searchInput')?.addEventListener('input', (e) => {
             this.search = e.target.value.toLowerCase();
             this.render();
         });
 
+        // Filter chips events
         document.querySelectorAll('.chip').forEach(chip => {
             chip.addEventListener('click', () => {
                 document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
@@ -35,16 +39,50 @@ class ClientsPage {
             });
         });
 
+        // Sort select event
         document.getElementById('sortSelect')?.addEventListener('change', (e) => {
             this.sort = e.target.value;
             this.render();
         });
 
+        // Container event delegation: Card Click (P4.8), Delete Button, Status Change
         this.container.addEventListener('click', (e) => {
+            // Delete button - no propagation to card click
             if (e.target.classList.contains('btn-delete')) {
+                e.stopPropagation();
                 this.delete(Number(e.target.dataset.id));
+                return;
+            }
+
+            // Status select dropdown on card -  no propagation to card click
+            if (e.target.classList.contains('card-status-select')) {
+                e.stopPropagation();
+                return;
+            }
+
+            // P4.8: Card Click -> Open Details Modal
+            const card = e.target.closest('.client-card');
+            if (card && card.dataset.id) {
+                this.openDetailsModal(Number(card.dataset.id));
             }
         });
+
+        // Card status change handler
+        this.container.addEventListener('change', (e) => {
+            if (e.target.classList.contains('card-status-select')) {
+                const id = Number(e.target.dataset.id);
+                const newStatus = e.target.value;
+                this.updateClientStatus(id, newStatus);
+            }
+        });
+
+        // P4.8 Details Modal events
+        document.getElementById('closeDetailsModalBtn')?.addEventListener('click', () => this.closeDetailsModal());
+        document.getElementById('detailsModal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'detailsModal') this.closeDetailsModal();
+        });
+        document.getElementById('addNoteForm')?.addEventListener('submit', (e) => this.handleAddNote(e));
+        document.getElementById('remindBtn')?.addEventListener('click', () => this.handleRemindMe());
     }
 
     async load() {
@@ -67,7 +105,7 @@ class ClientsPage {
             this.save();
             this.render();
         } catch (error) {
-            this.container.innerHTML = '<div class="empty-state">Could not load clients. Check your connection and try again.</div>';
+            this.container.innerHTML = '<div class="empty-state">Could not load clients. Check your connection and try again. <br><button onclick="window.location.reload()" class="btn-secondary" style="margin-top:10px;">Retry</button></div>';
         } finally {
             if (loading) loading.style.display = 'none';
         }
@@ -79,7 +117,7 @@ class ClientsPage {
             name: `${user.firstName} ${user.lastName}`,
             email: user.email,
             phone: user.phone,
-            company: user.company.name,
+            company: user.company?.name || 'Acme Corp',
             image: user.image,
             status: 'Lead',
             dealValue: Math.floor(Math.random() * 9500) + 500,
@@ -92,6 +130,16 @@ class ClientsPage {
         Storage.saveClients(this.clients);
     }
 
+    updateClientStatus(id, newStatus) {
+        const client = this.clients.find(c => c.id === id);
+        if (client) {
+            client.status = newStatus;
+            this.save();
+            this.render();
+            Toast.show('Status updated ✓', 'success');
+        }
+    }
+
     getVisibleClients() {
         let list = [...this.clients];
 
@@ -102,7 +150,7 @@ class ClientsPage {
         if (this.search) {
             list = list.filter(c =>
                 c.name.toLowerCase().includes(this.search) ||
-                c.company.toLowerCase().includes(this.search)
+                (c.company && c.company.toLowerCase().includes(this.search))
             );
         }
 
@@ -133,19 +181,29 @@ class ClientsPage {
 
             const card = document.createElement('div');
             card.className = 'client-card';
+            card.dataset.id = client.id;
+
             card.innerHTML = `
                 <div class="client-header">
-                    <img src="${client.image}" alt="${client.name}" class="client-avatar">
+                    <img src="${client.image || 'https://dummyjson.com/icon/newuser/128'}" alt="${client.name}" class="client-avatar">
                     <div class="client-info">
                         <h3>${client.name}</h3>
-                        <p>${client.company}</p>
+                        <p>${client.company || ''}</p>
                     </div>
                 </div>
                 <div class="client-details">
                     <p>📧 ${client.email}</p>
-                    <p>📞 ${client.phone}</p>
+                    <p>📞 ${client.phone || 'N/A'}</p>
                     <p>Value: <span class="deal-value">${price}</span></p>
-                    <p>Status: <span class="badge badge-${client.status.toLowerCase()}">${client.status}</span></p>
+                    <div style="margin-top: 0.5rem; display: flex; align-items: center; justify-content: space-between;">
+                        <span class="badge badge-${client.status.toLowerCase()}">${client.status}</span>
+                        <select class="card-status-select sort-select" data-id="${client.id}" style="padding: 0.2rem 0.4rem; font-size: 0.8rem;">
+                            <option value="Lead" ${client.status === 'Lead' ? 'selected' : ''}>Lead</option>
+                            <option value="Contacted" ${client.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
+                            <option value="Won" ${client.status === 'Won' ? 'selected' : ''}>Won</option>
+                            <option value="Lost" ${client.status === 'Lost' ? 'selected' : ''}>Lost</option>
+                        </select>
+                    </div>
                 </div>
                 <button class="btn-delete" data-id="${client.id}">Delete</button>
             `;
@@ -153,13 +211,14 @@ class ClientsPage {
         });
     }
 
-    openModal() {
-        document.getElementById('addClientModal').classList.add('active');
+    // Add Client Modal
+    openAddModal() {
+        document.getElementById('addClientModal')?.classList.add('active');
     }
 
-    closeModal() {
-        document.getElementById('addClientModal').classList.remove('active');
-        document.getElementById('addClientForm').reset();
+    closeAddModal() {
+        document.getElementById('addClientModal')?.classList.remove('active');
+        document.getElementById('addClientForm')?.reset();
         FormErrors.clear();
     }
 
@@ -201,7 +260,7 @@ class ClientsPage {
 
             this.save();
             this.render();
-            this.closeModal();
+            this.closeAddModal();
             Toast.show('Client added ✓', 'success');
         } catch (error) {
             Toast.show('Failed to add client', 'error');
@@ -241,12 +300,109 @@ class ClientsPage {
         try {
             await fetch(`https://dummyjson.com/users/${id}`, { method: 'DELETE' });
         } catch (error) {
-            // API შეიძლება 404 დააბრუნოს — მაინც ვშლით localStorage-დან
+            // API-side error handling can be added here if needed
         }
 
         this.clients = this.clients.filter(c => c.id !== id);
         this.save();
         this.render();
         Toast.show('Client deleted', 'success');
+    }
+
+    // =========================================
+    // P4.8 — Details Modal (Notes + Remind Me)
+    // =========================================
+    openDetailsModal(id) {
+        const client = this.clients.find(c => c.id === id);
+        if (!client) return;
+
+        this.activeClient = client;
+
+        const formattedDate = new Date(client.createdAt).toLocaleDateString();
+        const price = new Intl.NumberFormat('en-US', {
+            style: 'currency', currency: 'USD', maximumFractionDigits: 0
+        }).format(client.dealValue);
+
+        // populate modal fields
+        document.getElementById('detailsAvatar').src = client.image || 'https://dummyjson.com/icon/newuser/128';
+        document.getElementById('detailsName').innerText = client.name;
+        document.getElementById('detailsCompany').innerText = client.company || 'N/A';
+        document.getElementById('detailsEmail').innerText = client.email;
+        document.getElementById('detailsPhone').innerText = client.phone || 'N/A';
+        document.getElementById('detailsStatus').innerText = client.status;
+        document.getElementById('detailsStatus').className = `badge badge-${client.status.toLowerCase()}`;
+        document.getElementById('detailsDeal').innerText = price;
+        document.getElementById('detailsCreated').innerText = `Client since ${formattedDate}`;
+
+        this.renderNotes();
+
+        document.getElementById('detailsModal')?.classList.add('active');
+    }
+
+    closeDetailsModal() {
+        document.getElementById('detailsModal')?.classList.remove('active');
+        this.activeClient = null;
+    }
+
+    renderNotes() {
+        const notesContainer = document.getElementById('notesList');
+        if (!notesContainer || !this.activeClient) return;
+
+        notesContainer.innerHTML = '';
+        const notes = this.activeClient.notes || [];
+
+        if (notes.length === 0) {
+            notesContainer.innerHTML = '<p style="color: #94a3b8; font-size: 0.85rem;">No notes yet.</p>';
+            return;
+        }
+
+        notes.forEach(note => {
+            const item = document.createElement('div');
+            item.className = 'note-item';
+            item.innerHTML = `
+                <p class="note-text">• ${note.text}</p>
+                <span class="note-date">${note.date}</span>
+            `;
+            notesContainer.appendChild(item);
+        });
+    }
+
+    handleAddNote(e) {
+        e.preventDefault();
+        if (!this.activeClient) return;
+
+        const noteInput = document.getElementById('noteInput');
+        const text = noteInput.value.trim();
+        if (!text) return;
+
+        const newNote = {
+            text,
+            date: new Date().toLocaleString()
+        };
+
+        if (!this.activeClient.notes) {
+            this.activeClient.notes = [];
+        }
+
+        this.activeClient.notes.push(newNote);
+
+        // save to localStorage and re-render notes
+        this.save();
+        this.renderNotes();
+        noteInput.value = '';
+        Toast.show('Note added ✓', 'success');
+    }
+
+    handleRemindMe() {
+        if (!this.activeClient) return;
+        const clientName = this.activeClient.name;
+
+        // 1. immediate toast confirmation
+        Toast.show('Reminder set ✓', 'success');
+
+        // 2. toast reminder 
+        setTimeout(() => {
+            Toast.show(`⏰ Follow up: ${clientName}`, 'info');
+        }, 60000);
     }
 }

@@ -384,7 +384,7 @@ body:has(.sidebar) {
 }
 
 /* =========================================
-   MODAL STYLES (Add Client)
+   “MODAL STYLES (Add Client)
 ========================================= */
 .modal-overlay {
     display: none; /* დეფოლტად დამალულია */
@@ -453,4 +453,127 @@ body.light-theme .nav-links a {
 body.light-theme .nav-links a.active,
 body.light-theme .nav-links a:hover {
     color: #0284c7;
+}
+
+/* Modal Extra Utility Classes */
+.add-client-btn {
+    width: auto;
+    margin: 0;
+}
+
+.modal-title {
+    margin-bottom: 1.5rem;
+}
+
+.modal-select {
+    width: 100%;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+.modal-btn {
+    flex: 1;
+}
+
+.modal-details {
+    max-width: 520px;
+}
+
+.details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.details-user-box {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.details-avatar {
+    width: 60px;
+    height: 60px;
+}
+
+.details-name {
+    text-align: left;
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.details-company {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin-top: 2px;
+}
+
+.btn-close-modal {
+    padding: 0.3rem 0.6rem;
+}
+
+.details-info-box {
+    background: rgba(15, 23, 42, 0.5);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.2rem;
+}
+
+.details-created {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: 0.5rem;
+}
+
+.notes-section {
+    margin-bottom: 1.2rem;
+}
+
+.notes-title {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #38bdf8;
+}
+
+.notes-list {
+    max-height: 140px;
+    overflow-y: auto;
+    margin-bottom: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.add-note-form {
+    display: flex;
+    gap: 8px;
+}
+
+.note-input {
+    flex: 1;
+    padding: 0.5rem;
+}
+
+.btn-add-note {
+    width: auto;
+    margin: 0;
+    padding: 0.5rem 1rem;
+}
+
+.reminder-section {
+    border-top: 1px solid #334155;
+    padding-top: 1rem;
+    text-align: center;
+}
+
+.btn-remind {
+    width: 100%;
+    border: 1px dashed #38bdf8;
+    color: #38bdf8;
+    background: transparent;
 }

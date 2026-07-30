@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Clients - 10X CRM</title>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <div id="toast-container"></div>
 
-    <!-- ნავიგაცია -->
+    <!-- navigation -->
     <nav class="sidebar">
         <div class="logo">10X CRM</div>
         <ul class="nav-links">
             <li><a href="dashboard.html">Dashboard</a></li>
-            <!-- აქ ვუთითებთ class="active" რადგან Clients გვერდზე ვართ -->
             <li><a href="clients.html" class="active">Clients</a></li>
             <li><a href="profile.html">Profile</a></li>
         </ul>
@@ -24,15 +23,15 @@
         </div>
     </nav>
 
-    <!-- მთავარი კონტენტი -->
+    <!-- container -->
     <main class="main-content">
-        <!-- ჰედერი -->
-        <div class="header-section" style="margin-bottom: 1rem;">
+        <!-- header -->
+        <div class="header-section">
             <h1>Clients</h1>
-            <button class="btn add-client-btn" id="addClientBtn" style="width: auto; margin: 0;">+ Add Client</button>
+            <button class="btn add-client-btn" id="addClientBtn">+ Add Client</button>
         </div>
 
-        <!-- Toolbar: ძებნა, ფილტრები, სორტირება -->
+        <!-- Toolbar: search, filters, sort -->
         <div class="toolbar">
             <input type="text" id="searchInput" placeholder="Search by name or company..." class="search-input">
             
@@ -51,19 +50,19 @@
             </select>
         </div>
 
-        <!-- ჩატვირთვის ინდიკატორი -->
+        <!-- loading indicator -->
         <div id="loadingIndicator" class="loading-text" style="display: none;">Loading clients...</div>
 
-        <!-- კლიენტების ბარათების კონტეინერი -->
+        <!-- Clients Grid -->
         <div class="clients-grid" id="clientsContainer">
-            <!-- JS დახატავს ბარათებს აქ -->
+            
         </div>
     </main>
 
-    <!-- Add Client Modal (P4.4) -->
+    <!-- Add Client Modal -->
     <div id="addClientModal" class="modal-overlay">
         <div class="modal-content">
-            <h2 style="margin-bottom: 1.5rem;">Add New Client</h2>
+            <h2 class="modal-title">Add New Client</h2>
             <form id="addClientForm" novalidate>
                 <div class="form-group">
                     <label>Name</label>
@@ -91,7 +90,7 @@
                 </div>
                 <div class="form-group">
                     <label>Status</label>
-                    <select id="newClientStatus" class="sort-select" style="width: 100%;">
+                    <select id="newClientStatus" class="sort-select modal-select">
                         <option value="Lead" selected>Lead</option>
                         <option value="Contacted">Contacted</option>
                         <option value="Won">Won</option>
@@ -99,13 +98,58 @@
                     </select>
                 </div>
                 
-                <div style="display: flex; gap: 10px; margin-top: 1rem;">
-                    <button type="button" class="btn-secondary" id="closeModalBtn" style="flex: 1;">Cancel</button>
-                    <button type="submit" class="btn" style="flex: 1;">Save Client</button>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary modal-btn" id="closeModalBtn">Cancel</button>
+                    <button type="submit" class="btn modal-btn">Save Client</button>
                 </div>
             </form>
         </div>
     </div>
+
+    <!-- Details & Notes Modal -->
+    <div id="detailsModal" class="modal-overlay">
+        <div class="modal-content modal-details">
+            <div class="details-header">
+                <div class="details-user-box">
+                    <img id="detailsAvatar" src="" alt="Avatar" class="client-avatar details-avatar">
+                    <div>
+                        <h2 id="detailsName" class="details-name"></h2>
+                        <p id="detailsCompany" class="details-company"></p>
+                    </div>
+                </div>
+                <button type="button" id="closeDetailsModalBtn" class="btn-secondary btn-close-modal">✕</button>
+            </div>
+
+            <div class="client-details details-info-box">
+                <p>📧 <span id="detailsEmail"></span></p>
+                <p>📞 <span id="detailsPhone"></span></p>
+                <p>Status: <span id="detailsStatus" class="badge"></span></p>
+                <p>Deal Value: <span id="detailsDeal" class="deal-value"></span></p>
+                <p id="detailsCreated" class="details-created"></p>
+            </div>
+
+            <!-- Notes Section -->
+            <div class="notes-section">
+                <h3 class="notes-title">Notes</h3>
+                <div id="notesList" class="notes-list">
+                    <!-- JS renders notes here -->
+                </div>
+                
+                <form id="addNoteForm" class="add-note-form">
+                    <input type="text" id="noteInput" placeholder="Write a note..." class="note-input">
+                    <button type="submit" class="btn btn-add-note">Add note</button>
+                </form>
+            </div>
+
+            <!-- Follow-up Reminder Button -->
+            <div class="reminder-section">
+                <button type="button" id="remindBtn" class="btn-secondary btn-remind">
+                    ⏰ Remind me in 1 min
+                </button>
+            </div>
+        </div>
+    </div>
+
 
     <script src="js/storage.js"></script>
     <script src="js/ui.js"></script>
