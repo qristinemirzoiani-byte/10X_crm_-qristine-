@@ -188,24 +188,36 @@ class ClientsPage {
                     <img src="${client.image || 'https://dummyjson.com/icon/newuser/128'}" alt="${client.name}" class="client-avatar">
                     <div class="client-info">
                         <h3>${client.name}</h3>
-                        <p>${client.company || ''}</p>
+                        <p class="client-company-text">${client.company || 'Company'}</p>
                     </div>
                 </div>
                 <div class="client-details">
-                    <p>📧 ${client.email}</p>
-                    <p>📞 ${client.phone || 'N/A'}</p>
-                    <p>Value: <span class="deal-value">${price}</span></p>
-                    <div style="margin-top: 0.5rem; display: flex; align-items: center; justify-content: space-between;">
-                        <span class="badge badge-${client.status.toLowerCase()}">${client.status}</span>
-                        <select class="card-status-select sort-select" data-id="${client.id}" style="padding: 0.2rem 0.4rem; font-size: 0.8rem;">
-                            <option value="Lead" ${client.status === 'Lead' ? 'selected' : ''}>Lead</option>
-                            <option value="Contacted" ${client.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
-                            <option value="Won" ${client.status === 'Won' ? 'selected' : ''}>Won</option>
-                            <option value="Lost" ${client.status === 'Lost' ? 'selected' : ''}>Lost</option>
-                        </select>
+                    <div class="detail-field">
+                        <span class="field-label">EMAIL:</span>
+                        <span class="field-value">${client.email}</span>
+                    </div>
+                    <div class="detail-field">
+                        <span class="field-label">PHONE:</span>
+                        <span class="field-value">${client.phone || 'N/A'}</span>
+                    </div>
+                    <div class="detail-field">
+                        <span class="field-label">VALUE:</span>
+                        <span class="field-value deal-value">${price}</span>
                     </div>
                 </div>
-                <button class="btn-delete" data-id="${client.id}">Delete</button>
+                <div class="card-footer-row">
+                    <select class="card-status-select badge badge-${client.status.toLowerCase()}" data-id="${client.id}">
+                        <option value="Lead" ${client.status === 'Lead' ? 'selected' : ''}>Lead</option>
+                        <option value="Contacted" ${client.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
+                        <option value="Proposal" ${client.status === 'Proposal' ? 'selected' : ''}>Proposal</option>
+                        <option value="Won" ${client.status === 'Won' ? 'selected' : ''}>Won</option>
+                        <option value="Lost" ${client.status === 'Lost' ? 'selected' : ''}>Lost</option>
+                    </select>
+                    <div class="card-action-btns">
+                    <button type="button" class="btn-card-edit" data-id="${client.id}">✏️ Details</button>
+                    <button type="button" class="btn-delete" data-id="${client.id}" title="Delete client">🗑️</button>
+                    </div>
+                    </div>
             `;
             this.container.appendChild(card);
         });
