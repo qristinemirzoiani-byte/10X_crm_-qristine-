@@ -35,12 +35,22 @@
             </div>
 
             <div class="form-group">
-                <input type="password" id="regPassword" placeholder="Password">
+                <div class="password-input-container">
+                    <input type="password" id="regPassword" placeholder="Password">
+                    <button type="button" class="toggle-password-btn" data-target="regPassword" aria-label="Show password">
+                        <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </button>
+                </div>
                 <span class="error-text" id="passwordError"></span>
             </div>
 
             <div class="form-group">
-                <input type="password" id="regConfirmPassword" placeholder="Confirm Password">
+                <div class="password-input-container">
+                    <input type="password" id="regConfirmPassword" placeholder="Confirm Password">
+                    <button type="button" class="toggle-password-btn" data-target="regConfirmPassword" aria-label="Show password">
+                        <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </button>
+                </div>
                 <span class="error-text" id="confirmPasswordError"></span>
             </div>
 

@@ -64,17 +64,32 @@
             <form id="changePasswordForm" novalidate class="profile-form">
                 <div class="form-group">
                     <label>Current Password</label>
-                    <input type="password" id="currPassword">
+                    <div class="password-input-container">
+                        <input type="password" id="currPassword">
+                        <button type="button" class="toggle-password-btn" data-target="currPassword" aria-label="Show password">
+                            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
                     <span class="error-text" id="errCurrPass"></span>
                 </div>
                 <div class="form-group">
                     <label>New Password</label>
-                    <input type="password" id="newPassword">
+                    <div class="password-input-container">
+                        <input type="password" id="newPassword">
+                        <button type="button" class="toggle-password-btn" data-target="newPassword" aria-label="Show password">
+                            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
                     <span class="error-text" id="errNewPass"></span>
                 </div>
                 <div class="form-group">
                     <label>Confirm New Password</label>
-                    <input type="password" id="confirmNewPassword">
+                    <div class="password-input-container">
+                        <input type="password" id="confirmNewPassword">
+                        <button type="button" class="toggle-password-btn" data-target="confirmNewPassword" aria-label="Show password">
+                            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
                     <span class="error-text" id="errConfirmPass"></span>
                 </div>
                 <button type="submit" class="btn btn-inline">B. Change Password</button>
