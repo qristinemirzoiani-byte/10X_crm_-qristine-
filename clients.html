@@ -9,7 +9,7 @@
 <body>
     <div id="toast-container"></div>
 
-    <!-- ნავიგაცია -->
+    <!-- Navigation -->
     <nav class="sidebar">
         <a href="dashboard.html" class="logo-brand">
             <div class="logo-badge">
@@ -28,15 +28,15 @@
         </div>
     </nav>
 
-    <!-- მთავარი კონტენტი -->
+    <!-- Main Content -->
     <main class="main-content">
-        <!-- ჰედერი -->
+        <!-- Header -->
         <div class="header-section">
             <h1>Clients</h1>
             <button class="btn add-client-btn" id="addClientBtn">+ Add Client</button>
         </div>
 
-        <!-- Toolbar: ძებნა, ფილტრები, სორტირება -->
+        <!-- Toolbar: Search, Filters, Sorting -->
         <div class="toolbar">
             <input type="text" id="searchInput" placeholder="Search by name or company..." class="search-input">
             
@@ -56,12 +56,12 @@
             </select>
         </div>
 
-        <!-- ჩატვირთვის ინდიკატორი -->
+        <!-- Loading Indicator -->
         <div id="loadingIndicator" class="loading-text" style="display: none;">Loading clients...</div>
 
-        <!-- კლიენტების ბარათების კონტეინერი -->
+        <!-- Clients Cards Container -->
         <div class="clients-grid" id="clientsContainer">
-            <!-- JS დახატავს ბარათებს აქ -->
+            <!-- JS renders client cards here -->
         </div>
     </main>
 
