@@ -293,8 +293,8 @@ class ClientsPage {
         let valid = true;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (name.length < 5) {
-            FormErrors.show('newClientName', 'errName', 'Name must be at least 5 characters');
+        if (name.length < 3) {
+            FormErrors.show('newClientName', 'errName', 'Name must be at least 3 characters');
             valid = false;
         }
 
