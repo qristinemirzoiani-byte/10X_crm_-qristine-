@@ -9,9 +9,14 @@
 <body>
     <div id="toast-container"></div>
 
-    <!-- navigation -->
+    <!-- ნავიგაცია -->
     <nav class="sidebar">
-        <div class="logo">10X CRM</div>
+        <a href="dashboard.html" class="logo-brand">
+            <div class="logo-badge">
+                <span class="logo-text">10X</span>
+                <div class="logo-underline"></div>
+            </div>
+        </a>
         <ul class="nav-links">
             <li><a href="dashboard.html">Dashboard</a></li>
             <li><a href="clients.html" class="active">Clients</a></li>
@@ -23,15 +28,15 @@
         </div>
     </nav>
 
-    <!-- container -->
+    <!-- მთავარი კონტენტი -->
     <main class="main-content">
-        <!-- header -->
+        <!-- ჰედერი -->
         <div class="header-section">
             <h1>Clients</h1>
             <button class="btn add-client-btn" id="addClientBtn">+ Add Client</button>
         </div>
 
-        <!-- Toolbar: search, filters, sort -->
+        <!-- Toolbar: ძებნა, ფილტრები, სორტირება -->
         <div class="toolbar">
             <input type="text" id="searchInput" placeholder="Search by name or company..." class="search-input">
             
@@ -39,6 +44,7 @@
                 <button class="chip active" data-filter="All">All</button>
                 <button class="chip" data-filter="Lead">Lead</button>
                 <button class="chip" data-filter="Contacted">Contacted</button>
+                <button class="chip" data-filter="Proposal">Proposal</button>
                 <button class="chip" data-filter="Won">Won</button>
                 <button class="chip" data-filter="Lost">Lost</button>
             </div>
@@ -50,16 +56,16 @@
             </select>
         </div>
 
-        <!-- loading indicator -->
+        <!-- ჩატვირთვის ინდიკატორი -->
         <div id="loadingIndicator" class="loading-text" style="display: none;">Loading clients...</div>
 
-        <!-- Clients Grid -->
+        <!-- კლიენტების ბარათების კონტეინერი -->
         <div class="clients-grid" id="clientsContainer">
-            
+            <!-- JS დახატავს ბარათებს აქ -->
         </div>
     </main>
 
-    <!-- Add Client Modal -->
+    <!-- Add Client Modal (P4.4) -->
     <div id="addClientModal" class="modal-overlay">
         <div class="modal-content">
             <h2 class="modal-title">Add New Client</h2>
@@ -107,7 +113,7 @@
         </div>
     </div>
 
-    <!-- Details & Notes Modal -->
+    <!-- P4.8 Details & Notes Modal -->
     <div id="detailsModal" class="modal-overlay">
         <div class="modal-content modal-details">
             <div class="details-header">
@@ -133,6 +139,7 @@
             <div class="notes-section">
                 <h3 class="notes-title">Notes</h3>
                 <div id="notesList" class="notes-list">
+                    <!-- JS renders notes here -->
                 </div>
                 
                 <form id="addNoteForm" class="add-note-form">
@@ -149,7 +156,6 @@
             </div>
         </div>
     </div>
-
 
     <script src="js/storage.js"></script>
     <script src="js/ui.js"></script>

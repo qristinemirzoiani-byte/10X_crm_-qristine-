@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Log In - 10X CRM</title>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <!-- test  -->
-<!-- <button onclick="sheinaxeMonacemi()">დააჭირე და შეინახე "გამარჯობა"</button> -->
-
-
-<div id="toast-container"></div>
+    <div id="toast-container"></div>
 
     <div class="auth-container">
+        <div class="logo-brand">
+            <div class="logo-badge">
+                <span class="logo-text">10X</span>
+                <div class="logo-underline"></div>
+            </div>
+        </div>
         <h2>Welcome back</h2>
         
         <form id="loginForm" novalidate>
@@ -27,8 +29,8 @@
                 <span class="error-text" id="loginPasswordError"></span>
             </div>
 
-            <!-- ზოგადი შეცდომის ტექსტი ლოგინისას -->
-            <span class="error-text" id="loginGlobalError" style="text-align: center; margin-bottom: 10px;"></span>
+            <!-- Global login error message -->
+            <span class="error-text global-error-text" id="loginGlobalError"></span>
 
             <button type="submit" class="btn">Log In</button>
         </form>
