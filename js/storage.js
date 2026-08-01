@@ -1,4 +1,4 @@
-// localStorage-ის ერთი ადგილი — ყველა key აქ არის
+// Centralized localStorage keys & storage manager
 class Storage {
     static KEYS = {
         USERS: 'crm_users',

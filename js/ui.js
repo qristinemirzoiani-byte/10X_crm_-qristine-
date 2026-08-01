@@ -1,15 +1,19 @@
-// UI დამხმარეები — toast და ფორმის შეცდომები
+// UI Helpers — Toast notifications and Form Error handlers
 class Toast {
     static show(message, type = 'success') {
-        const container = document.getElementById('toast-container');
-        if (!container) return;
+        let container = document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            document.body.appendChild(container);
+        }
 
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
         toast.innerText = message;
         container.appendChild(toast);
 
-        setTimeout(() => toast.remove(), 3000);
+        setTimeout(() => toast.remove(), 4000);
     }
 }
 

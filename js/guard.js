@@ -1,4 +1,4 @@
-// P0.1 — დაცული გვერდების კონტროლი
+// P0.1 — AuthGuard (Protected routes access control)
 class AuthGuard {
     static PUBLIC_PAGES = ['index.html', 'signup.html', ''];
 

@@ -1,4 +1,4 @@
-// P0.3 — Dark/Light თემა
+// P0.3 — Dark/Light Theme Switcher
 class Theme {
     constructor() {
         const saved = localStorage.getItem(Storage.KEYS.THEME) || 'dark';

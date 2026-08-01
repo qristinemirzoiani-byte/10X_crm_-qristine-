@@ -1,4 +1,4 @@
-// P4 — clients page (loading, CRUD, filtering, sorting, details modal P4.8)
+// P4 — Clients Page (Data loading, CRUD, Filtering, Sorting, Details modal P4.8)
 class ClientsPage {
     constructor() {
         this.clients = [];
@@ -47,14 +47,21 @@ class ClientsPage {
 
         // Container event delegation: Card Click (P4.8), Delete Button, Status Change
         this.container.addEventListener('click', (e) => {
-            // Delete button - no propagation to card click
+            // Delete button
             if (e.target.classList.contains('btn-delete')) {
                 e.stopPropagation();
                 this.delete(Number(e.target.dataset.id));
                 return;
             }
 
-            // Status select dropdown on card -  no propagation to card click
+            // Edit button
+            if (e.target.classList.contains('btn-card-edit')) {
+                e.stopPropagation();
+                this.openDetailsModal(Number(e.target.dataset.id));
+                return;
+            }
+
+            // Status select dropdown on card
             if (e.target.classList.contains('card-status-select')) {
                 e.stopPropagation();
                 return;
@@ -193,31 +200,34 @@ class ClientsPage {
                 </div>
                 <div class="client-details">
                     <div class="detail-field">
-                        <span class="field-label">EMAIL:</span>
-                        <span class="field-value">${client.email}</span>
+                        <span class="field-label">EMAIL</span>
+                        <span class="field-value" title="${client.email}">${client.email}</span>
                     </div>
-                    <div class="detail-field">
-                        <span class="field-label">PHONE:</span>
-                        <span class="field-value">${client.phone || 'N/A'}</span>
+                    <div class="detail-row-group">
+                        <div class="detail-field">
+                            <span class="field-label">PHONE</span>
+                            <span class="field-value">${client.phone || 'N/A'}</span>
+                        </div>
+                        <div class="detail-field">
+                            <span class="field-label">VALUE</span>
+                            <span class="field-value deal-value">${price}</span>
+                        </div>
                     </div>
-                    <div class="detail-field">
-                        <span class="field-label">VALUE:</span>
-                        <span class="field-value deal-value">${price}</span>
+                    <div class="detail-field" style="margin-top: 4px;">
+                        <span class="field-label">STATUS</span>
+                        <select class="card-status-select badge badge-${client.status.toLowerCase()}" data-id="${client.id}">
+                            <option value="Lead" ${client.status === 'Lead' ? 'selected' : ''}>Lead</option>
+                            <option value="Contacted" ${client.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
+                            <option value="Proposal" ${client.status === 'Proposal' ? 'selected' : ''}>Proposal</option>
+                            <option value="Won" ${client.status === 'Won' ? 'selected' : ''}>Won</option>
+                            <option value="Lost" ${client.status === 'Lost' ? 'selected' : ''}>Lost</option>
+                        </select>
                     </div>
                 </div>
                 <div class="card-footer-row">
-                    <select class="card-status-select badge badge-${client.status.toLowerCase()}" data-id="${client.id}">
-                        <option value="Lead" ${client.status === 'Lead' ? 'selected' : ''}>Lead</option>
-                        <option value="Contacted" ${client.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
-                        <option value="Proposal" ${client.status === 'Proposal' ? 'selected' : ''}>Proposal</option>
-                        <option value="Won" ${client.status === 'Won' ? 'selected' : ''}>Won</option>
-                        <option value="Lost" ${client.status === 'Lost' ? 'selected' : ''}>Lost</option>
-                    </select>
-                    <div class="card-action-btns">
-                    <button type="button" class="btn-card-edit" data-id="${client.id}">✏️ Details</button>
-                    <button type="button" class="btn-delete" data-id="${client.id}" title="Delete client">🗑️</button>
-                    </div>
-                    </div>
+                    <button type="button" class="btn-card-edit" data-id="${client.id}">✏️ Edit</button>
+                    <button type="button" class="btn-delete" data-id="${client.id}">🗑️ Delete</button>
+                </div>
             `;
             this.container.appendChild(card);
         });
@@ -312,7 +322,7 @@ class ClientsPage {
         try {
             await fetch(`https://dummyjson.com/users/${id}`, { method: 'DELETE' });
         } catch (error) {
-            // API-side error handling can be added here if needed
+            // DummyJSON may return 404 for custom IDs — still filter and remove from localStorage
         }
 
         this.clients = this.clients.filter(c => c.id !== id);
@@ -322,7 +332,7 @@ class ClientsPage {
     }
 
     // =========================================
-    // P4.8 — Details Modal (Notes + Remind Me)
+    // P4.8 — Client Details Modal, Notes & Reminders
     // =========================================
     openDetailsModal(id) {
         const client = this.clients.find(c => c.id === id);
@@ -335,7 +345,7 @@ class ClientsPage {
             style: 'currency', currency: 'USD', maximumFractionDigits: 0
         }).format(client.dealValue);
 
-        // populate modal fields
+        // Populate modal element fields with client object data
         document.getElementById('detailsAvatar').src = client.image || 'https://dummyjson.com/icon/newuser/128';
         document.getElementById('detailsName').innerText = client.name;
         document.getElementById('detailsCompany').innerText = client.company || 'N/A';
@@ -398,7 +408,7 @@ class ClientsPage {
 
         this.activeClient.notes.push(newNote);
 
-        // save to localStorage and re-render notes
+        // Save to localStorage and render notes
         this.save();
         this.renderNotes();
         noteInput.value = '';
@@ -409,10 +419,10 @@ class ClientsPage {
         if (!this.activeClient) return;
         const clientName = this.activeClient.name;
 
-        // 1. immediate toast confirmation
+        // 1. Immediate Toast confirmation
         Toast.show('Reminder set ✓', 'success');
 
-        // 2. toast reminder 
+        // 2. Timed reminder toast after 60 seconds (60,000 ms)
         setTimeout(() => {
             Toast.show(`⏰ Follow up: ${clientName}`, 'info');
         }, 60000);
