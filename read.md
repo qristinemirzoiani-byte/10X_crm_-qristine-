@@ -1,143 +1,82 @@
-# რა არის localStorage და სად ვნახო?
-localStorage (ლოკალური საცავი) არ არის ფაილი. ეს არის ბრაუზერის შიდა მეხსიერება, ერთგვარი "რვეული", რომელშიც ბრაუზერს შეუძლია ტექსტების ჩაწერა. რაც არ უნდა გამორთო კომპიუტერი, ეს რვეული ინახავს ჩანაწერებს, სანამ შენით არ წაშლი.
-- სად ჩანს ეგ? გახსენი შენი საიტი ბრაუზერში, დეველოპერის პანელი ზემოთ მენიუში მოძებნე Application (ან Storage). მარცხენა მხარეს დაინახავ Local Storage განყოფილებას. ზუსტად მანდ ჩნდება ის მონაცემები, რასაც ჯავასკრიპტით ვინახავთ.
-- crm_session და crm_users ფაილები კი არაა, უბრალოდ იმ "რვეულის" გვერდების სახელებია (Keys), სადაც რაღაცას ვწერთ.
+# 10X CRM — Client Relationship Management System
 
-# რა არის JSON.parse და JSON.stringify?
-localStorage-ს აქვს ერთი მინუსი: მასში მხოლოდ ტექსტის შენახვა შეიძლება. შენ კი გინდა მასივების (Array) და ობიექტების შენახვა.
-JSON.stringify(რაღაც) — წარმოიდგინე, რომ შენი მასივი ჩადე ყუთში, დააწებე სკოჩი და ტექსტად აქციე, რომ localStorage-ში შეეტიოს. ამას ვიყენებთ შენახვისას.
-JSON.parse(რაღაც) — ეს არის ყუთის გახსნა. როცა localStorage-დან იღებ იმ "ტექსტს", ამ ბრძანებით უკან აბრუნებ ცოცხალ ჯავასკრიპტის მასივად ან ობიექტად. ამას ვიყენებთ წაკითხვისას.
+A streamlined, modern Client Relationship Management (CRM) web application designed for sales managers to track leads, manage customer pipelines, record notes, set reminders, and analyze key business metrics in real-time.
 
-<!-- ლოკალ სთორი გავიგე სად არის და  -->
+---
 
-# window არის მთლიანად ჩემი ფანჯარა ბრაუზერში (ჩაშენებული სიტყვაა).
-# location არის ის ადგილი (მისამართის ველი), სადაც ლინკი წერია.
-# pathname არის კონკრეტულად მისამართი. მაგალითად: /c/Users/admin/desktop/site/clients.html.
-# .split('/') ამ მისამართს ჭრის ნაჭრებად.
-# .pop() იღებს ბოლო ნაჭერს, ანუ clients.html-ს.
-# || 'index.html' ნიშნავს: "თუ სახელი ვერ იპოვე, ჩათვალე რომ index.html-ზე ვართ". ამით ჯავასკრიპტი იგებს, რომელ გვერდზე ხარ ახლა.
+## 🌟 Key Features
 
-# რას ჭრის split? წარმოიდგინე შენი მისამართი: C:/MyFolder/MySite/dashboard.html. ჯავასკრიპტს აინტერესებს მხოლოდ ბოლო სიტყვა (dashboard.html). split('/') ამ გრძელ ტექსტს ჭრის იქ, სადაც / ხაზი (სლეში) წერია და აკეთებს სიას: ['C:', 'MyFolder', 'MySite', 'dashboard.html']. მერე pop() იღებს ამ სიიდან სულ ბოლოს.
-- || კი, ნიშნავს "ან"-ს! ეს იმიტომ გვიწერია, რომ ზოგჯერ ბრაუზერი მისამართში index.html-ს მალავს (უბრალოდ C:/MyFolder/MySite/ გიჩვენებს). ამიტომ ვეუბნებით: "ამოიღე ბოლო სიტყვა, ან თუ ბოლო სიტყვა ცარიელია, მაშინ ჩათვალე, რომ index.html-ზე ვართ".
+* **P0 — Security & Global Controls**
+  * **Auth Guard**: Protected routes (`dashboard.html`, `clients.html`, `profile.html`) redirect unauthenticated users to `index.html` (Login). Authenticated users visiting public pages are redirected to `dashboard.html`.
+  * **Theme Switcher**: Instant Dark Mode and Light Mode toggle, persisting preference in `localStorage` under `crm_theme`.
+  * **Toast Notifications**: Reusable, animated toast messages for user feedback (`success`, `error`, `info`).
 
-new Date().toISOString() — ეს არის ის პატარა აპარატი მისაღებში, რომელიც ზუსტ ახლანდელ დროს და თარიღს ბეჭდავს ჩეკზე. (მაგალითად: ეხლა არის 2024 წლის 15 მარტი 15:30. ეს კოდი მაგ დროს დაიჭერს და ტექსტად დაწერს).
-JSON.stringify(session) — ეს არის ამ ჩეკის და გასაღების კონვერტში ჩადება, რომ სეიფში ლამაზად დაეტიოს.
-localStorage.setItem('crm_session', ...) — ეს არის ამ კონვერტის სეიფში (მეხსიერებაში) შენახვა და ზედ მარკერით დაწერა "crm_session". ეს ნიშნავს, რომ ეს ადამიანი ოფიციალურად სასტუმროშია (ანუ დალოგინდა). როგორც კი ამას გააკეთებს, შემდეგი ხაზი (window.location.href = 'dashboard.html') ეუბნება: "ახლა წადი შენს ოთახში (დეშბორდზე)".
+* **P1 & P2 — Authentication (Sign Up & Login)**
+  * **Client-side Registration**: Form validation requiring at least 3 characters for name, valid email format with duplicate prevention, and strong passwords (at least 8 chars with letter & number).
+  * **Secure Login Flow**: Session object stored in `localStorage` (`crm_session`), removing session on Logout without clearing saved clients.
 
-<!-- ჯერ-ჯერობით ყველაფერი ქართულად მიწერია რადგან კარგად მინდა გავიაზრო და მივხვდე როგორ მუშაობს ლოკალსთორი -->
+* **P3 — Interactive Dashboard**
+  * **Personalized Greeting & Live Clock**: Displays user's first name and a live updating clock (`toLocaleDateString()` and `toLocaleTimeString()`).
+  * **Real-time Stat Cards**:
+    * **Total Clients**: Count of all active clients.
+    * **Active Deals**: Clients in `Lead`, `Contacted`, or `Proposal` stage.
+    * **Won Revenue**: Sum of deal values for `Won` status formatted in USD currency.
+    * **New This Week**: Clients created within the last 7 days.
+  * **Pipeline Overview**: Breakdown of clients across sales funnel stages.
+  * **Recent Clients List**: Displays top 5 newest clients with direct link to full list.
 
---------------
-# როდესაც ჯავასკრიპტში კლასის შიგნით წერ this.რაღაც = მნიშვნელობა,
- შენ ბრაუზერს ეუბნები:
-„ჰეი, ჯავასკრიპტ! აი ამ კლასის ბაზაზე როცა ობიექტს შექმნი, მას აუცილებლად დააყოლე ჩემ მიერ მოგონილი ეს ოთხი ცვლადი (თვისება) და შიგნით ეს საწყისი მონაცემები ჩაუდეო“.
+* **P4 — Clients Management (Full CRUD + Search & Filter)**
+  * **API Integration**: Fetches 30 realistic client profiles from `https://dummyjson.com/users?limit=30` on initial load and caches them in `localStorage` (`crm_clients`).
+  * **Instant Search & Multi-Stage Filter Chips**: Search by name or company, filter by status (`All`, `Lead`, `Contacted`, `Won`, `Lost`), and sort (`Newest`, `Name A-Z`, `Deal Value High -> Low`).
+  * **Add New Client Modal**: Full modal validation with real REST POST simulated payload.
+  * **Interactive Status Select**: Change client pipeline status directly from card badge.
+  * **Details & Notes Modal**: Click card to open modal displaying full client details, timeline notes history, and note addition.
+  * **Follow-up Reminder**: Timed reminder button triggering background notification in 1 minute (`setTimeout`).
+  * **Delete Client**: Confirmation dialog and REST DELETE payload simulation with local removal.
 
-2. როგორ მუშაობს - new და რატომ არ გვჭირდება ცვლადების ცალკე new-ით შექმნა?
-ჩვენ არ გვჭირდება new clients() ან new filter() წერა. რატომ? იმიტომ, რომ new იწერება მხოლოდ მთლიანი კლასის გამოსაძახებლად, ხოლო ეს ცვლადები ამ კლასის „შიგნეულობაა“.
-წარმოიდგინე ასეთი მარტივი ვიზუალური შედარება:
-კლასი (ClientsPage) არის ქარხნული ყალიბი (შაბლონი), რომლითაც ტელეფონებს აწყობენ.
-კონსტრუქტორი (constructor) არის ქარხნის ის კონვეიერი, რომელიც ამ ყალიბით ტელეფონის აწყობას იწყებს.
-this.clients, this.filter, this.search არის ტელეფონის ნაწილები (ეკრანი, ელემენტი, კამერა), რომლებსაც ქარხანა შიგნით უმონტაჟებს.
-როდესაც შენს მთავარ ფაილში იწერება ეს კოდი:
-code
-JavaScript
-new ClientsPage();
-- ამ დროს ხდება შემდეგი ჯაჭვური რეაქცია:
-ბრაუზერი ხედავს სიტყვა new-ს და ხვდება: „ოჰ, ახალი ობიექტი უნდა შევქმნა ClientsPage შაბლონით!“
-ის მაშინვე გარბის და რთავს კლასის შიგნით არსებულ constructor()-ს.
-constructor()-ის შიგნით სიტყვა this ხდება სწორედ ის ახლადშექმნილი ობიექტი.
-კოდი this.filter = 'All' ამ ახალ ობიექტს გულში უწერს თვისებას filter მნიშვნელობით 'All'.
-ბოლოს იძახებს this.load()-ს, რათა კლიენტების ჩატვირთვა დაიწყოს.
-ანუ, შენ ქმნი მთლიან ობიექტს new ClientsPage()-ით და ამ ობიექტს ავტომატურად, „მზა პაკეტად“ მოყვება თავისი clients, filter და სხვა ცვლადები!
+* **P5 — Profile & Data Management**
+  * **User Profile Card**: Displays user avatar initials, full name, email, company, and registration date.
+  * **Edit Profile**: Modify full name and company with instant updates across header and dashboard.
+  * **Change Password**: Validates current password and updates credentials securely.
+  * **Reset CRM Data**: Option to wipe local client storage and re-fetch clean default 30 clients from API.
 
------
-# ?. = Optional Chaining.
-ნიშნავს: "თუ არსებობს, გააკეთე."
-ყველაზე ხშირად გამოიყენება:
-getElementById(...)?
-querySelector(...)?
-ობიექტების თვისებების წაკითხვისას (user?.name).
+---
 
-💡 ერთი დეტალი: ?. არ არის if-ის შემოკლება, მაგრამ ხშირად იგივე მიზანს ემსახურება — იცავს კოდს null ან undefined მნიშვნელობებზე შეცდომისგან.
+## 🛠️ Tech Stack
 
-- მოდალი (იგივე Modal Window ან Popup) არის ფანჯარა, რომელიც ეკრანზე „ამოხტება“ ხოლმე, ხოლო უკანა ფონს აბნელებს.
-ეს პროცესი ჯავასკრიპტსა და CSS-ში მუშაობს ძალიან მარტივად, კლასის ჩართვა/გამორთვით.
+* **Frontend Structure**: HTML5, CSS3 (Tailwind CSS utilities + custom CSS variables)
+* **Logic & Interactivity**: Vanilla JavaScript (ES6+ Object-Oriented JavaScript Class Architecture)
+* **State & Persistence**: Web Storage API (`localStorage`)
+* **Asynchronous Operations**: Promises, `fetch` API, `async`/`await`
+* **Icons & Assets**: Custom SVG & Unicode Icons
 
-### 💡 მნიშვნელოვანი JS კონცეფციების მოკლე განმარტება
+---
 
-#### 1. Optional Chaining (`?.`) — უსაფრთხო წვდომა
-* **რას აკეთებს:** ამოწმებს, არსებობს თუ არა HTML ელემენტი გვერდზე (`null`-ია თუ არა) სანამ მასზე მოქმედებას (მაგ. ივენთის მიბმას) შევასრულებთ.
-* **რატომ ვიყენებთ:** თავიდან გვარიდებს შეცდომას (`TypeError: Cannot read properties of null`), თუ კონკრეტულ გვერდზე საჭირო ელემენტი არ დაგვხვდა. კოდი უსაფრთხოდ აგრძელებს მუშაობას.
-* **მაგალითი:** `document.getElementById('addClientBtn')?.addEventListener(...)`
+## 🚀 How to Run Locally
 
-#### 2. `e.target` — მოვლენის კონკრეტული სამიზნე
-* **რას აკეთებს:** გვიბრუნებს ზუსტად იმ კონკრეტულ HTML ელემენტს, რომელსაც მომხმარებელმა რეალურად დააჭირა ხელი (კურსორი).
-* **რატომ ვიყენებთ:** გვეხმარება გავარჩიოთ, მომხმარებელმა ბარათის შიგნით არსებულ ტექსტს დააჭირა, წაშლის ღილაკს, თუ უკანა მუქ ფონს.
+1. Clone or download the repository.
+2. Open `index.html` directly in any modern browser, or launch using Vite / Live Server:
+   ```bash
+   npm run dev
+   ```
+3. Navigate to `http://localhost:3000` (or `http://localhost:5173`).
 
-#### 3. მოდალური ფანჯრის დახურვა ფონზე დაჭერით
-* **ლოგიკა:** `if (e.target.id === 'addClientModal') this.closeModal();`
-* **როგორ მუშაობს:** როცა მომხმარებელი აჭერს ეკრანს, `e.target.id` ამოწმებს დაჭერილი ელემენტის ID-ს. თუ ID არის `addClientModal` (ანუ მოდალის უკანა მუქი, გამჭვირვალე ფონი), ფანჯარა იხურება. ხოლო თუ ფორმის შიგნით დააჭირა რამეს, მოდალი ღია რჩება.
+---
 
---------------
-1. ფილტრაციის ჩიპების ლოგიკა 
-document.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        this.filter = chip.dataset.filter;
-        this.render();
-    });
-});
-- ყველა ჩიპის პოვნა: document.querySelectorAll('.chip') პოულობს HTML-ში არსებულ ყველა ფილტრის ღილაკს (ჩიპს).
-ციკლით გავლა (forEach): სათითაოდ ყველა ჩიპს ვამაგრებთ დაწკაპუნების (click) მსმენელს.
-- ვიზუალური გააქტიურება: ჩიპზე დაჭერისას ჯერ ყველა ჩიპს ვაცლით active კლასს, შემდეგ კი მხოლოდ იმას ვუმატებთ, რომელზეც მომხმარებელმა დააწკაპუნა (chip.classList.add('active')).
-- მონაცემის დამახსოვრება: this.filter = chip.dataset.filter კითხულობს HTML-ში data-filter ატრიბუტით გაწერილ მნიშვნელობას (მაგალითად: "Won", "Lead") და ინახავს ჩვენს this.filter ცვლადში.
-- ეკრანის განახლება: this.render() თავიდან ხატავს კლიენტების სიას მხოლოდ არჩეული სტატუსით.
+## 🧪 Demo Test Account
 
------------
-### 📌 JavaScript Events & Logic Cheatsheet (10X CRM)
+* **Email**: `demo@example.com`
+* **Password**: `demo1234`
+*(Alternatively, click "Sign Up" to create a new local account).*
 
-#### 1. Common Browser Events
-* **click** - Fires when an element is clicked (Buttons, Links).
-* **submit** - Fires when a form is submitted. (Used to prevent default page reload via `e.preventDefault()`).
-* **input** - Fires instantly when user types in an input field (Used for real-time search).
-* **change** - Fires when a form element value is changed (Dropdown lists, checkboxes).
+---
 
-#### 2. Sorting Dropdown (`change` event)
-```javascript
-document.getElementById('sortSelect')?.addEventListener('change', (e) => {
-    this.sort = e.target.value; // Gets the selected option text (e.g., 'name')
-    this.render();              // Re-draws the list on the screen
-});
-3. Event Delegation (Deleting Clients)
-Instead of adding event listeners to 30 individual delete buttons, we add a single listener to the parent container (this.container).
-code
-JavaScript
-this.container.addEventListener('click', (e) => {
-    // Check if the clicked element (e.target) is actually the delete button
-    if (e.target.classList.contains('btn-delete')) {
-        // dataset.id reads "data-id" from HTML, Number() converts the string to a number
-        this.delete(Number(e.target.dataset.id));
-    }
-});
-e.target = The exact element that was clicked inside the container.
-dataset.id = Reads the unique ID attached to the button (from data-id).
----------
+## 🌐 Live Deployment
 
-### Key JavaScript Concepts Learned
+* **Live Demo URL**: [https://10xcrmqristine.vercel.app/](https://10xcrmqristine.vercel.app/)
 
-#### 1. Event Delegation (მოვლენის დელეგირება)
-*   **Concept:** Instead of attaching event listeners to multiple child elements (like 30 delete buttons), we attach a single listener to the parent container (`this.container`).
-*   **Why?** It improves performance and works perfectly for dynamically added new elements.
+---
 
-#### 2. Event Target (`e.target`)
-*   **Concept:** A built-in property that references the exact HTML element that triggered the event (the actual element clicked by the user).
+## 📚 Credits & Acknowledgments
 
-#### 3. Class Validation (`classList.contains`)
-*   **Concept:** `classList` returns a list of classes on the element. `.contains('className')` is a built-in method that checks if a specific class exists, returning `true` or `false`.
-
-#### 4. The `change` Event
-*   **Concept:** Triggers when the value of an element (like a dropdown `<select>`, checkbox, or radio button) changes.
-
-#### 5. Custom Methods vs Built-in Methods
-*   **`this.delete(id)`** is a custom function written in our class to handle database and local storage deletion, while **`Number()`** or **`contains()`** are built-in JavaScript helpers.
-
+Built for the **10X CRM Project Exam** (Product Requirements Document v3.0). Powered by Vanilla JavaScript, LocalStorage API, and DummyJSON Users API.
