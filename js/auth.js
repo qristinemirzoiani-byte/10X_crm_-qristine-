@@ -43,7 +43,7 @@ class Auth {
     validateSignup({ name, email, password, confirmPassword }) {
         let valid = true;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{10,}$/;
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
 
         if (name.length < 3) {
             FormErrors.show('regName', 'nameError', 'Full name must be at least 3 characters');
@@ -61,7 +61,7 @@ class Auth {
         }
 
         if (!passwordRegex.test(password)) {
-            FormErrors.show('regPassword', 'passwordError', 'Password must be at least 10 characters and contain a letter and a number');
+            FormErrors.show('regPassword', 'passwordError', 'Password must be at least 8 characters and contain a letter and a number');
             valid = false;
         }
         // 'regPassword', 'passwordError', 'Password must be at least 10 characters and contain a letter and a number'
