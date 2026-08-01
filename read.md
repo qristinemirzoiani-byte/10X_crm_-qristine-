@@ -65,8 +65,8 @@ A streamlined, modern Client Relationship Management (CRM) web application desig
 
 ## 🧪 Demo Test Account
 
-* **Email**: `demo@example.com`
-* **Password**: `demo1234`
+* **Email**: `demo@gmail.com` (or `demo@example.com`)
+* **Password**: `pasword123` (or `demo1234`)
 *(Alternatively, click "Sign Up" to create a new local account).*
 
 ---
