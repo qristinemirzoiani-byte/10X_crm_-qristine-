@@ -1,4 +1,4 @@
-/* Global Styles */
+@import "tailwindcss";
 
 * {
     box-sizing: border-box;
@@ -693,7 +693,7 @@ body:has(.sidebar) {
 
 /* Light theme */
 body.light-theme {
-    background-color: #f8fafc;
+    background-color: #f1f5f9;
     color: #0f172a;
 }
 
@@ -705,20 +705,20 @@ body.light-theme .stat-card,
 body.light-theme .toolbar {
     background-color: #ffffff;
     color: #0f172a;
-    border-color: #e2e8f0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
 }
 
 body.light-theme .client-card:hover {
-    border-color: #cbd5e1;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    border-color: #0284c7;
+    box-shadow: 0 10px 22px rgba(2, 132, 199, 0.12);
 }
 
 body.light-theme input,
 body.light-theme .search-input,
 body.light-theme .sort-select,
 body.light-theme select {
-    background-color: #ffffff;
+    background-color: #f8fafc;
     color: #0f172a;
     border-color: #cbd5e1;
 }
@@ -732,8 +732,8 @@ body.light-theme .client-company-text {
 }
 
 body.light-theme .client-details {
-    background-color: #f1f5f9;
-    border-color: #e2e8f0;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
 }
 
 body.light-theme .field-label {
